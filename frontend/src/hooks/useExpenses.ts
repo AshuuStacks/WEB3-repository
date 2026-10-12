@@ -1,6 +1,8 @@
 import { useState, useEffect, useCallback } from "react";
 import type { Expense } from "../types";
 
+const host = import.meta.env.VITE_API_URL || "http://unknown-api-url.com";
+
 const useExpenses = () => {
     const [expenses, setExpenses] = useState<Expense[]>([]);
     const [loading, setLoading] = useState(true);
@@ -11,7 +13,7 @@ const useExpenses = () => {
             setLoading(true);
             setError(null);
 
-            const response = await fetch("/api/expenses");
+            const response = await fetch(`${host}/api/expenses`);
 
             if (!response.ok) {
                 throw new Error("Failed to fetch expenses");
@@ -35,7 +37,7 @@ const useExpenses = () => {
     }, [fetchExpenses]);
 
     const addExpense = async (expense: Expense) => {
-        const response = await fetch("/api/expenses", {
+        const response = await fetch(`${host}/api/expenses`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -51,7 +53,7 @@ const useExpenses = () => {
     };
 
     const resetExpenses = async () => {
-        const response = await fetch("/api/expenses/reset", {
+        const response = await fetch(`${host}/api/expenses/reset`, {
             method: "POST"
         });
 

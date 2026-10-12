@@ -19,5 +19,12 @@
     "description": "Example expense #3 from Alice",
     "payer": "Alice",
     "amount": 2
+  },
+  {
+    "id": "1791819418426",
+    "date": "2026-10-12T15:36:58.426Z",
+    "description": "New expense 1791819418426",
+    "payer": "Bob",
+    "amount": 79.88
   }
 ]
