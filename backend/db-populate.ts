@@ -1,20 +1,41 @@
-import { readFileSync } from "node:fs";
+
 import { db } from "./src/prisma/db.ts";
-
 async function main() {
-  const data = readFileSync("data/expenses.init.json", "utf-8");
-  const expenses = JSON.parse(data);
+  // 1. Créer les utilisateurs
+  const ashu = await db.orm.public.User.create({
+    name: "Ashu",
+    email: "ashu@example.com",
+  });
 
-  for (const expense of expenses) {
-    await db.orm.public.Expense.create({
-      date: expense.date,
-      description: expense.description,
-      payer: expense.payer,
-      amount: expense.amount,
-    });
-  }
+  const alex = await db.orm.public.User.create({
+    name: "Alex",
+    email: "alex@example.com",
+    bankAccount: null,
+  });
 
-  console.log("Dépenses importées !");
+  // 2. Créer les dépenses
+  const expense1 = await db.orm.public.Expense.create({
+    date: new Date().toISOString(),
+    description: "Courses",
+    amount: 45,
+    payerId: ashu.id,
+  });
+
+  await db.orm.public.Expense.create({
+    date: new Date().toISOString(),
+    description: "Restaurant",
+    amount: 30,
+    payerId: alex.id,
+  });
+
+  // 3. Créer un transfert entre les utilisateurs
+  await db.orm.public.Transfer.create({
+    amount: 15,
+    sourceId: ashu.id,
+    targetId: alex.id,
+  });
+
+  console.log("Utilisateurs, dépenses et transfert créés !");
 }
 
 main()
