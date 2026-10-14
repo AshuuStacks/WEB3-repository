@@ -1,9 +1,8 @@
 
- export  interface Expense {
-  id: string;
+export type Expense = {
+  id: number | string;
   date: string;
   description: string;
-  payer: string;
+  payerId: number;
   amount: number;
-}
-
+};

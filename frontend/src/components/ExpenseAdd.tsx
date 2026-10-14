@@ -1,4 +1,3 @@
-
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -9,7 +8,7 @@ type ExpenseItemProps = {
 };
 
 const expenseSchema = z.object({
-  payer: z.enum(["Alice", "Bob"], {
+  payerId: z.enum(["1", "2"], {
     error: "Le payeur doit être Alice ou Bob.",
   }),
   date: z.string().min(1, "La date est obligatoire."),
@@ -32,25 +31,25 @@ const ExpenseAdd = (props: ExpenseItemProps) => {
   } = useForm<ExpenseFormData>({
     resolver: zodResolver(expenseSchema),
     defaultValues: {
-      payer: "Alice",
+      payerId: "1",
       date: new Date().toISOString().slice(0, 10),
       description: "",
     },
   });
 
   const onSubmit = (data: ExpenseFormData) => {
-    const newExpense: Expense = {
+    const newExpense = {
       id: Date.now().toString(),
       date: new Date(data.date).toISOString(),
       description: data.description,
-      payer: data.payer,
+      payerId: Number(data.payerId),
       amount: data.amount,
-    };
+    } as Expense;
 
     props.addExpense(newExpense);
 
     reset({
-      payer: "Alice",
+      payerId: "1",
       date: new Date().toISOString().slice(0, 10),
       description: "",
       amount: undefined,
@@ -61,12 +60,12 @@ const ExpenseAdd = (props: ExpenseItemProps) => {
     <form onSubmit={handleSubmit(onSubmit)}>
       <label>
         Payeur :
-        <select {...register("payer")}>
-          <option value="Alice">Alice</option>
-          <option value="Bob">Bob</option>
+        <select {...register("payerId")}>
+          <option value="1">Alice</option>
+          <option value="2">Bob</option>
         </select>
       </label>
-      {errors.payer && <p>{errors.payer.message}</p>}
+      {errors.payerId && <p>{errors.payerId.message}</p>}
 
       <label>
         Date :
