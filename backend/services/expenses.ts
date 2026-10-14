@@ -1,5 +1,4 @@
-import { db } from "../src/prisma/db";
-
+import { db } from "../src/prisma/db.ts";
 export async function getAllExpenses() {
   return await db.orm.public.Expense.all();
 }
